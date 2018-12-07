@@ -51,6 +51,8 @@ supply_sound = pygame.mixer.Sound('sound/supply.wav')
 supply_sound.set_volume(0.2)
 
 
+clock = pygame.time.Clock()
+
 def main():
     # 播放背景音乐
     pygame.mixer.music.play(-1)
@@ -62,10 +64,22 @@ def main():
             if event.type == QUIT:
                 pygame.quit()
                 sys.exit()
+        key = pygame.key.get_pressed()
+        if key[K_UP]:
+            me.moveUp()
+        if key[K_DOWN]:
+            me.moveDown()
+        if key[K_LEFT]:
+            me.moveLeft()
+        if key[K_RIGHT]:
+            me.moveRight()
+
 
         screen.blit(background, origin)
         screen.blit(me.image, me.rect)
         pygame.display.flip()
+        # 设置一个帧数刷新率，没看懂这里的原理，官网文档设置了40，测试40有卡顿感觉
+        clock.tick_busy_loop(60)
 
 
 if __name__ == '__main__':
