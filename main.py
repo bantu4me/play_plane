@@ -50,15 +50,18 @@ me_down_sound.set_volume(0.2)
 supply_sound = pygame.mixer.Sound('sound/supply.wav')
 supply_sound.set_volume(0.2)
 
-
 clock = pygame.time.Clock()
+
 
 def main():
     # 播放背景音乐
     pygame.mixer.music.play(-1)
-
     # 创建我的飞机
     me = MyPlane(bg_size)
+    # 动画切换标记
+    switch_img = True
+    # 延迟刷新控制
+    delay = 5
     while True:
         for event in pygame.event.get():
             if event.type == QUIT:
@@ -74,9 +77,16 @@ def main():
         if key[K_RIGHT]:
             me.moveRight()
 
+        # 控制飞机每五秒钟切换一次动画
+        delay -= 1
+        if not delay:
+            delay = 100
+        if not (delay % 5):
+            switch_img = not switch_img
+            me.active_flag = switch_img
 
         screen.blit(background, origin)
-        screen.blit(me.image, me.rect)
+        screen.blit(me.active_img, me.rect)
         pygame.display.flip()
         # 设置一个帧数刷新率，没看懂这里的原理，官网文档设置了40，测试40有卡顿感觉
         clock.tick_busy_loop(60)
