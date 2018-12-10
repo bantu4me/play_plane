@@ -2,6 +2,7 @@ import pygame
 from pygame.locals import *
 import sys
 from myplane import MyPlane
+from enemy import Enermy
 
 # 初始化
 pygame.init()
@@ -53,6 +54,15 @@ supply_sound.set_volume(0.2)
 clock = pygame.time.Clock()
 
 
+# 新增敌机
+def add_enemies(num):
+    enemies = []
+    for i in range(num):
+        e = Enermy(bg_size)
+        enemies.append(e)
+    return enemies
+
+
 def main():
     # 播放背景音乐
     pygame.mixer.music.play(-1)
@@ -62,12 +72,18 @@ def main():
     switch_img = True
     # 延迟刷新控制
     delay = 5
+
+    # 初始化敌机
+    enemies = add_enemies(15)
+
     while True:
+        # 事件循环检测
         for event in pygame.event.get():
             if event.type == QUIT:
                 pygame.quit()
                 sys.exit()
         key = pygame.key.get_pressed()
+        # 方向操作
         if key[K_UP]:
             me.moveUp()
         if key[K_DOWN]:
@@ -87,6 +103,11 @@ def main():
 
         screen.blit(background, origin)
         screen.blit(me.active_img, me.rect)
+        # 绘制敌机
+        for e in enemies:
+            e.move()
+            screen.blit(e.image, e.rect)
+
         pygame.display.flip()
         # 设置一个帧数刷新率，没看懂这里的原理，官网文档设置了40，测试40有卡顿感觉
         clock.tick_busy_loop(60)
