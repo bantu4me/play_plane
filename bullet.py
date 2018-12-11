@@ -7,9 +7,12 @@ class Bullet(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.left, self.rect.top = position
         self.speed = 12
+        # 子弹碰撞即为false
+        self.active = True
 
     def move(self):
         self.rect.top -= self.speed
+
 
     def reset(self, position):
         self.rect.left, self.rect.top = position

@@ -57,11 +57,10 @@ clock = pygame.time.Clock()
 
 
 # 新增敌机
-def add_enemies(num):
-    enemies = []
+def add_enemies(enemies, num):
     for i in range(num):
         e = Enermy(bg_size)
-        enemies.append(e)
+        enemies.add(e)
     return enemies
 
 
@@ -84,7 +83,8 @@ def main():
     # 延迟刷新控制
     delay = 5
     # 初始化敌机
-    enemies = add_enemies(15)
+    enemies = pygame.sprite.Group()
+    add_enemies(enemies, 15)
     # 初始化子弹
     bullet_index = 0
     bullet_num = 5
@@ -114,21 +114,41 @@ def main():
         if not (delay % 5):
             switch_img = not switch_img
             me.active_flag = switch_img
-
+        # 绘制背景
         screen.blit(background, origin)
+        # 绘制我的飞机
         screen.blit(me.active_img, me.rect)
         # 绘制敌机
         for e in enemies:
-            e.move()
-            screen.blit(e.image, e.rect)
+            if e.active:
+                e.move()
+                screen.blit(e.image, e.rect)
+            else:
+                if not (delay % 3):
+                    if e.destory_index == 0:
+                        enemy1_down_sound.play()
+                    screen.blit(e.destory_imgs[e.destory_index], e.rect)
+                    e.destory_index += 1
+                    if e.destory_index == 4:
+                        e.reset()
+
+        # 子弹
+        for b in bullets:
+            if b.active:
+                b.move()
+                screen.blit(b.image, b.rect)
+                enemies_hit = pygame.sprite.spritecollide(b, enemies, False)
+                if enemies_hit:
+                    # 子弹击中目标重置位置
+                    b.reset(me.rect.midtop)
+                    for e in enemies_hit:
+                        # 击落敌机
+                        e.active = False
 
         # 子弹重绘
         if not (delay % 10):
             bullets[bullet_index].reset(me.rect.midtop)
             bullet_index = (bullet_index + 1) % bullet_num
-        for b in bullets:
-            b.move()
-            screen.blit(b.image, b.rect)
 
         pygame.display.flip()
         # 设置一个帧数刷新率，没看懂这里的原理，官网文档设置了40，测试40有卡顿感觉
