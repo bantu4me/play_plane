@@ -1,6 +1,8 @@
 import pygame
 from pygame.locals import *
 import sys
+
+from bullet import Bullet
 from myplane import MyPlane
 from enemy import Enermy
 
@@ -63,6 +65,15 @@ def add_enemies(num):
     return enemies
 
 
+# 初始化子弹
+def add_bullets(num, position):
+    bullets = []
+    for i in range(num):
+        b = Bullet(position)
+        bullets.append(b)
+    return bullets
+
+
 def main():
     # 播放背景音乐
     pygame.mixer.music.play(-1)
@@ -72,9 +83,12 @@ def main():
     switch_img = True
     # 延迟刷新控制
     delay = 5
-
     # 初始化敌机
     enemies = add_enemies(15)
+    # 初始化子弹
+    bullet_index = 0
+    bullet_num = 5
+    bullets = add_bullets(bullet_num, me.rect.midtop)
 
     while True:
         # 事件循环检测
@@ -107,6 +121,14 @@ def main():
         for e in enemies:
             e.move()
             screen.blit(e.image, e.rect)
+
+        # 子弹重绘
+        if not (delay % 10):
+            bullets[bullet_index].reset(me.rect.midtop)
+            bullet_index = (bullet_index + 1) % bullet_num
+        for b in bullets:
+            b.move()
+            screen.blit(b.image, b.rect)
 
         pygame.display.flip()
         # 设置一个帧数刷新率，没看懂这里的原理，官网文档设置了40，测试40有卡顿感觉
