@@ -57,9 +57,9 @@ clock = pygame.time.Clock()
 
 
 # 新增敌机
-def add_enemies(enemies, num):
+def add_enemies(enemies, num, type=1):
     for i in range(num):
-        e = Enermy(bg_size)
+        e = Enermy(bg_size, type)
         enemies.add(e)
     return enemies
 
@@ -85,6 +85,8 @@ def main():
     # 初始化敌机
     enemies = pygame.sprite.Group()
     add_enemies(enemies, 15)
+    # 初始化中型敌机
+    add_enemies(enemies, 10, type=2)
     # 初始化子弹
     bullet_index = 0
     bullet_num = 5
