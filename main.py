@@ -87,6 +87,8 @@ def main():
     add_enemies(enemies, 15)
     # 初始化中型敌机
     add_enemies(enemies, 10, type=2)
+    # 初始化大型敌机
+    add_enemies(enemies, 10, type=3)
     # 初始化子弹
     bullet_index = 0
     bullet_num = 5
@@ -131,7 +133,7 @@ def main():
                         enemy1_down_sound.play()
                     screen.blit(e.destory_imgs[e.destory_index], e.rect)
                     e.destory_index += 1
-                    if e.destory_index == 4:
+                    if e.destory_index == len(e.destory_imgs):
                         e.reset()
 
         # 子弹

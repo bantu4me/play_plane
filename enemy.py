@@ -5,8 +5,10 @@ from random import *
 
 
 class Enermy(pygame.sprite.Sprite):
+
     def __init__(self, bg_size, type=1):
         pygame.sprite.Sprite.__init__(self)
+        self.speed = 2
         self.destory_index = 0
         self.active = True
         self.width, self.height = bg_size[0], bg_size[1]
@@ -20,7 +22,6 @@ class Enermy(pygame.sprite.Sprite):
     def init_normal_enermy_info(self):
         self.image = pygame.image.load('image/enemy1.png').convert_alpha()
         self.rect = self.image.get_rect()
-        self.speed = 2
         self.rect.left, self.rect.top = randint(0, self.width - self.rect.width), \
                                         randint(-5 * self.height, 0)
         # 坠毁效果
@@ -34,7 +35,6 @@ class Enermy(pygame.sprite.Sprite):
     def init_mid_enermy_info(self):
         self.image = pygame.image.load('image/enemy2.png').convert_alpha()
         self.rect = self.image.get_rect()
-        self.speed = 2
         self.rect.left, self.rect.top = randint(0, self.width - self.rect.width), \
                                         randint(-10 * self.height, -self.height)
         self.destory_imgs = [
@@ -45,7 +45,19 @@ class Enermy(pygame.sprite.Sprite):
         ]
 
     def init_big_enermy_info(self):
-        pass
+        self.image = pygame.image.load('image/enemy3_n1.png').convert_alpha()
+        self.image2 = pygame.image.load('image/enemy3_n2.png').convert_alpha()
+        self.rect = self.image.get_rect()
+        self.rect.left, self.rect.top = randint(0, self.width - self.rect.width), \
+                                        randint(-15 * self.height, -5 * self.height)
+        self.destory_imgs = [
+            pygame.image.load('image/enemy3_down1.png').convert_alpha(),
+            pygame.image.load('image/enemy3_down2.png').convert_alpha(),
+            pygame.image.load('image/enemy3_down3.png').convert_alpha(),
+            pygame.image.load('image/enemy3_down4.png').convert_alpha(),
+            pygame.image.load('image/enemy3_down5.png').convert_alpha(),
+            pygame.image.load('image/enemy3_down6.png').convert_alpha()
+        ]
 
     def move(self):
         if self.rect.top < self.height:
