@@ -75,7 +75,7 @@ def add_bullets(num, position):
 
 def main():
     # 播放背景音乐
-    pygame.mixer.music.play(-1)
+    # pygame.mixer.music.play(-1)
     # 创建我的飞机
     me = MyPlane(bg_size)
     # 动画切换标记
@@ -145,9 +145,19 @@ def main():
                 if enemies_hit:
                     # 子弹击中目标重置位置
                     b.reset(me.rect.midtop)
+                    # print('hit count:', len(enemies_hit))
                     for e in enemies_hit:
                         # 击落敌机
-                        e.active = False
+                        if e.type == 1:
+                            e.active = False
+                        elif e.type == 2 or e.type == 3:
+                            if e.hp > 0:
+                                e.hp -= 1
+                                e.is_hit = True
+                            else:
+                                e.active = False
+
+
 
         # 子弹重绘
         if not (delay % 10):

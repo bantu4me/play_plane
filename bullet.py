@@ -13,6 +13,5 @@ class Bullet(pygame.sprite.Sprite):
     def move(self):
         self.rect.top -= self.speed
 
-
     def reset(self, position):
         self.rect.left, self.rect.top = position

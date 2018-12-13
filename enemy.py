@@ -12,6 +12,7 @@ class Enermy(pygame.sprite.Sprite):
         self.destory_index = 0
         self.active = True
         self.width, self.height = bg_size[0], bg_size[1]
+        self.type = type
         if type == 1:
             self.init_normal_enermy_info()
         elif type == 2:
@@ -31,6 +32,7 @@ class Enermy(pygame.sprite.Sprite):
             pygame.image.load('image/enemy1_down3.png').convert_alpha(),
             pygame.image.load('image/enemy1_down4.png').convert_alpha()
         ]
+        self.hp = 1
 
     def init_mid_enermy_info(self):
         self.image = pygame.image.load('image/enemy2.png').convert_alpha()
@@ -43,6 +45,9 @@ class Enermy(pygame.sprite.Sprite):
             pygame.image.load('image/enemy2_down3.png').convert_alpha(),
             pygame.image.load('image/enemy2_down4.png').convert_alpha()
         ]
+        self.hp = 5
+        self.is_hit = False
+        self.hit_img = pygame.image.load('image/enemy2_hit.png').convert_alpha()
 
     def init_big_enermy_info(self):
         self.image = pygame.image.load('image/enemy3_n1.png').convert_alpha()
@@ -58,6 +63,9 @@ class Enermy(pygame.sprite.Sprite):
             pygame.image.load('image/enemy3_down5.png').convert_alpha(),
             pygame.image.load('image/enemy3_down6.png').convert_alpha()
         ]
+        self.hp = 10
+        self.is_hit = False
+        self.hit_img = pygame.image.load('image/enemy3_hit.png').convert_alpha()
 
     def move(self):
         if self.rect.top < self.height:
@@ -70,8 +78,8 @@ class Enermy(pygame.sprite.Sprite):
                                         randint(-5 * self.height, 0)
         self.active = True
         self.destory_index = 0
-
+        # 根据type类型增加hp
+        self.hp = 1 if self.type==1 else (5 if self.type==2 else 10)
 
 if __name__ == '__main__':
-    for _ in range(10):
-        print(randint(0, 10))
+    pass
