@@ -13,7 +13,13 @@ class MyPlane(pygame.sprite.Sprite):
         self.rect.left, self.rect.top = (self.width - self.rect.width) // 2, \
                                         (self.height - self.rect.height - 60)
         self.speed = 10
-        # self.mask = pygame.mask.from_surface(self.image1)
+        self.destory_index = 0
+        self.destory_imgs = [
+            pygame.image.load('image/hero_blowup_n1.png').convert_alpha(),
+            pygame.image.load('image/hero_blowup_n2.png').convert_alpha(),
+            pygame.image.load('image/hero_blowup_n3.png').convert_alpha(),
+            pygame.image.load('image/hero_blowup_n4.png').convert_alpha()]
+        self.active = True
 
     # 移动函数
     def moveUp(self):

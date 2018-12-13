@@ -77,7 +77,7 @@ def add_bullets(num, position):
 
 def main():
     # 播放背景音乐
-    # pygame.mixer.music.play(-1)
+    pygame.mixer.music.play(-1)
     # 创建我的飞机
     me = MyPlane(bg_size)
     # 动画切换标记
@@ -95,8 +95,8 @@ def main():
     bullet_index = 0
     bullet_num = 5
     bullets = add_bullets(bullet_num, me.rect.midtop)
-
-    while True:
+    running = True
+    while running:
         # 事件循环检测
         for event in pygame.event.get():
             if event.type == QUIT:
@@ -122,8 +122,27 @@ def main():
             me.active_flag = switch_img
         # 绘制背景
         screen.blit(background, origin)
+
         # 绘制我的飞机
-        screen.blit(me.active_img, me.rect)
+        # 增加碰撞检测
+        me_enemies_hit = pygame.sprite.spritecollide(me,enemies,False)
+        if me_enemies_hit:
+            me.active = False
+            for e in me_enemies_hit:
+                e.active = False
+        if me.active:
+            screen.blit(me.active_img, me.rect)
+        else:
+            me_down_sound.play()
+            if not (delay % 3):
+                screen.blit(me.destory_imgs[me.destory_index], me.rect)
+                me.destory_index += 1
+                if me.destory_index == len(me.destory_imgs):
+                    me.destory_index = 0
+                    me.active = True
+                    print('finish')
+
+
         # 绘制敌机
         for e in enemies:
             if e.active:
