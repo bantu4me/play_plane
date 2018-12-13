@@ -54,6 +54,8 @@ supply_sound = pygame.mixer.Sound('sound/supply.wav')
 supply_sound.set_volume(0.2)
 
 clock = pygame.time.Clock()
+GREEN = (0, 255, 0)
+RED = (255, 0, 0)
 
 
 # 新增敌机
@@ -126,6 +128,9 @@ def main():
         for e in enemies:
             if e.active:
                 e.move()
+                # 判断飞机类型绘画血条
+                if e.type != 1:
+                    draw_hp(screen,e)
                 screen.blit(e.image, e.rect)
             else:
                 if not (delay % 3):
@@ -157,8 +162,6 @@ def main():
                             else:
                                 e.active = False
 
-
-
         # 子弹重绘
         if not (delay % 10):
             bullets[bullet_index].reset(me.rect.midtop)
@@ -167,6 +170,14 @@ def main():
         pygame.display.flip()
         # 设置一个帧数刷新率，没看懂这里的原理，官网文档设置了40，测试40有卡顿感觉
         clock.tick_busy_loop(60)
+
+
+def draw_hp(screen, enemy):
+    start = (enemy.rect.left, enemy.rect.top-5)
+    width = enemy.hp / enemy.full_hp * (enemy.rect.width)
+    end = (enemy.rect.left+width, enemy.rect.top-5)
+    color = GREEN if enemy.hp/enemy.full_hp > 0.2 else RED
+    pygame.draw.line(screen,color,start,end,2)
 
 
 if __name__ == '__main__':

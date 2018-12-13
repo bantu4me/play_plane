@@ -32,7 +32,7 @@ class Enermy(pygame.sprite.Sprite):
             pygame.image.load('image/enemy1_down3.png').convert_alpha(),
             pygame.image.load('image/enemy1_down4.png').convert_alpha()
         ]
-        self.hp = 1
+        self.hp = self.full_hp = 1
 
     def init_mid_enermy_info(self):
         self.image = pygame.image.load('image/enemy2.png').convert_alpha()
@@ -45,7 +45,7 @@ class Enermy(pygame.sprite.Sprite):
             pygame.image.load('image/enemy2_down3.png').convert_alpha(),
             pygame.image.load('image/enemy2_down4.png').convert_alpha()
         ]
-        self.hp = 5
+        self.hp = self.full_hp = 5
         self.is_hit = False
         self.hit_img = pygame.image.load('image/enemy2_hit.png').convert_alpha()
 
@@ -63,7 +63,7 @@ class Enermy(pygame.sprite.Sprite):
             pygame.image.load('image/enemy3_down5.png').convert_alpha(),
             pygame.image.load('image/enemy3_down6.png').convert_alpha()
         ]
-        self.hp = 10
+        self.hp = self.full_hp = 10
         self.is_hit = False
         self.hit_img = pygame.image.load('image/enemy3_hit.png').convert_alpha()
 
@@ -79,7 +79,7 @@ class Enermy(pygame.sprite.Sprite):
         self.active = True
         self.destory_index = 0
         # 根据type类型增加hp
-        self.hp = 1 if self.type==1 else (5 if self.type==2 else 10)
+        self.hp = self.full_hp
 
 if __name__ == '__main__':
     pass
