@@ -33,6 +33,7 @@ class Enermy(pygame.sprite.Sprite):
             pygame.image.load('image/enemy1_down4.png').convert_alpha()
         ]
         self.hp = self.full_hp = 1
+        self.score = 100
 
     def init_mid_enermy_info(self):
         self.image = pygame.image.load('image/enemy2.png').convert_alpha()
@@ -48,6 +49,7 @@ class Enermy(pygame.sprite.Sprite):
         self.hp = self.full_hp = 5
         self.is_hit = False
         self.hit_img = pygame.image.load('image/enemy2_hit.png').convert_alpha()
+        self.score = 500
 
     def init_big_enermy_info(self):
         self.image = pygame.image.load('image/enemy3_n1.png').convert_alpha()
@@ -66,6 +68,7 @@ class Enermy(pygame.sprite.Sprite):
         self.hp = self.full_hp = 10
         self.is_hit = False
         self.hit_img = pygame.image.load('image/enemy3_hit.png').convert_alpha()
+        self.score = 1000
 
     def move(self):
         if self.rect.top < self.height:

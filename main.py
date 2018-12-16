@@ -56,6 +56,7 @@ supply_sound.set_volume(0.2)
 clock = pygame.time.Clock()
 GREEN = (0, 255, 0)
 RED = (255, 0, 0)
+BLACK = (0, 0, 0)
 
 
 # 新增敌机
@@ -86,16 +87,22 @@ def main():
     delay = 5
     # 初始化敌机
     enemies = pygame.sprite.Group()
-    add_enemies(enemies, 15)
+    # add_enemies(enemies, 15)
     # 初始化中型敌机
     add_enemies(enemies, 10, type=2)
     # 初始化大型敌机
-    add_enemies(enemies, 10, type=3)
+    # add_enemies(enemies, 10, type=3)
     # 初始化子弹
     bullet_index = 0
-    bullet_num = 5
+    bullet_num = 4
     bullets = add_bullets(bullet_num, me.rect.midtop)
     running = True
+
+    # 绘制分数信息
+    font = pygame.font.SysFont('', 35)
+    score = 0
+    score_info = 'Score='
+
     while running:
         # 事件循环检测
         for event in pygame.event.get():
@@ -125,7 +132,7 @@ def main():
 
         # 绘制我的飞机
         # 增加碰撞检测
-        me_enemies_hit = pygame.sprite.spritecollide(me,enemies,False)
+        me_enemies_hit = pygame.sprite.spritecollide(me, enemies, False)
         if me_enemies_hit:
             me.active = False
             for e in me_enemies_hit:
@@ -140,8 +147,6 @@ def main():
                 if me.destory_index == len(me.destory_imgs):
                     me.destory_index = 0
                     me.active = True
-                    print('finish')
-
 
         # 绘制敌机
         for e in enemies:
@@ -149,7 +154,7 @@ def main():
                 e.move()
                 # 判断飞机类型绘画血条
                 if e.type != 1:
-                    draw_hp(screen,e)
+                    draw_hp(screen, e)
                 screen.blit(e.image, e.rect)
             else:
                 if not (delay % 3):
@@ -159,6 +164,7 @@ def main():
                     e.destory_index += 1
                     if e.destory_index == len(e.destory_imgs):
                         e.reset()
+                        score += e.score
 
         # 子弹
         for b in bullets:
@@ -186,17 +192,20 @@ def main():
             bullets[bullet_index].reset(me.rect.midtop)
             bullet_index = (bullet_index + 1) % bullet_num
 
+        score_sur = font.render(score_info + str(score), True, BLACK)
+        screen.blit(score_sur, (10,10))
+
         pygame.display.flip()
         # 设置一个帧数刷新率，没看懂这里的原理，官网文档设置了40，测试40有卡顿感觉
         clock.tick_busy_loop(60)
 
 
 def draw_hp(screen, enemy):
-    start = (enemy.rect.left, enemy.rect.top-5)
+    start = (enemy.rect.left, enemy.rect.top - 5)
     width = enemy.hp / enemy.full_hp * (enemy.rect.width)
-    end = (enemy.rect.left+width, enemy.rect.top-5)
-    color = GREEN if enemy.hp/enemy.full_hp > 0.2 else RED
-    pygame.draw.line(screen,color,start,end,2)
+    end = (enemy.rect.left + width, enemy.rect.top - 5)
+    color = GREEN if enemy.hp / enemy.full_hp > 0.2 else RED
+    pygame.draw.line(screen, color, start, end, 2)
 
 
 if __name__ == '__main__':
