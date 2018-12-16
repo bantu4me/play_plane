@@ -87,14 +87,14 @@ def main():
     delay = 5
     # 初始化敌机
     enemies = pygame.sprite.Group()
-    # add_enemies(enemies, 15)
+    add_enemies(enemies, 15)
     # 初始化中型敌机
     add_enemies(enemies, 10, type=2)
     # 初始化大型敌机
-    # add_enemies(enemies, 10, type=3)
+    add_enemies(enemies, 10, type=3)
     # 初始化子弹
     bullet_index = 0
-    bullet_num = 4
+    bullet_num = 5
     bullets = add_bullets(bullet_num, me.rect.midtop)
     running = True
 
@@ -132,7 +132,7 @@ def main():
 
         # 绘制我的飞机
         # 增加碰撞检测
-        me_enemies_hit = pygame.sprite.spritecollide(me, enemies, False)
+        me_enemies_hit = pygame.sprite.spritecollide(me, enemies, False, pygame.sprite.collide_mask)
         if me_enemies_hit:
             me.active = False
             for e in me_enemies_hit:
@@ -171,7 +171,7 @@ def main():
             if b.active:
                 b.move()
                 screen.blit(b.image, b.rect)
-                enemies_hit = pygame.sprite.spritecollide(b, enemies, False)
+                enemies_hit = pygame.sprite.spritecollide(b, enemies, False, pygame.sprite.collide_mask)
                 if enemies_hit:
                     # 子弹击中目标重置位置
                     b.reset(me.rect.midtop)

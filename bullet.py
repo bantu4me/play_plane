@@ -9,6 +9,7 @@ class Bullet(pygame.sprite.Sprite):
         self.speed = 12
         # 子弹碰撞即为false
         self.active = True
+        pygame.mask.from_surface(self.image)
 
     def move(self):
         self.rect.top -= self.speed
