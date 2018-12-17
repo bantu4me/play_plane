@@ -5,6 +5,7 @@ import sys
 from bullet import Bullet
 from myplane import MyPlane
 from enemy import Enermy
+from supply import Supply
 
 # 初始化
 pygame.init()
@@ -78,7 +79,7 @@ def add_bullets(num, position):
 
 def main():
     # 播放背景音乐
-    pygame.mixer.music.play(-1)
+    # pygame.mixer.music.play(-1)
     # 创建我的飞机
     me = MyPlane(bg_size)
     # 动画切换标记
@@ -89,9 +90,9 @@ def main():
     enemies = pygame.sprite.Group()
     add_enemies(enemies, 15)
     # 初始化中型敌机
-    add_enemies(enemies, 10, type=2)
+    # add_enemies(enemies, 10, type=2)
     # 初始化大型敌机
-    add_enemies(enemies, 10, type=3)
+    # add_enemies(enemies, 10, type=3)
     # 初始化子弹
     bullet_index = 0
     bullet_num = 5
@@ -102,6 +103,9 @@ def main():
     font = pygame.font.SysFont('', 35)
     score = 0
     score_info = 'Score='
+
+    # 补给
+    supply = Supply(bg_size)
 
     while running:
         # 事件循环检测
@@ -192,8 +196,20 @@ def main():
             bullets[bullet_index].reset(me.rect.midtop)
             bullet_index = (bullet_index + 1) % bullet_num
 
+        # 提供补给的粗略逻辑：
+        # 每30秒钟以30%的概率出现一个补给
+        if supply.active:
+            supply.move()
+            screen.blit(supply.image, supply.rect)
+        else:
+            supply.re_init()
+
+        supply_get = pygame.sprite.collide_mask(me, supply)
+        if supply_get:
+            supply.active = False
+
         score_sur = font.render(score_info + str(score), True, BLACK)
-        screen.blit(score_sur, (10,10))
+        screen.blit(score_sur, (10, 10))
 
         pygame.display.flip()
         # 设置一个帧数刷新率，没看懂这里的原理，官网文档设置了40，测试40有卡顿感觉
