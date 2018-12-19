@@ -68,13 +68,20 @@ def add_enemies(enemies, num, type=1):
     return enemies
 
 
-# 初始化子弹
+# 初始单发化子弹
 def add_bullets(num, position):
-    bullets = []
+    single_bullets = []
     for i in range(num):
         b = Bullet(position)
-        bullets.append(b)
-    return bullets
+        single_bullets.append(b)
+    return single_bullets
+
+
+# 炸弹
+BOMB = pygame.image.load('image/bomb.png').convert_alpha()
+bomb_rect = BOMB.get_rect()
+MAX_BOMB_NUM = 3
+bomb_draw_height = bg_size[1] - bomb_rect.height
 
 
 def main():
@@ -95,7 +102,7 @@ def main():
     # add_enemies(enemies, 10, type=3)
     # 初始化子弹
     bullet_index = 0
-    bullet_num = 5
+    bullet_num = 4
     bullets = add_bullets(bullet_num, me.rect.midtop)
     running = True
 
@@ -106,6 +113,7 @@ def main():
 
     # 补给
     supply = Supply(bg_size)
+    bomb_num = 0
 
     while running:
         # 事件循环检测
@@ -113,6 +121,13 @@ def main():
             if event.type == QUIT:
                 pygame.quit()
                 sys.exit()
+            # 检测按下了空格键,炸毁视野中的飞机
+            space_down = pygame.key.get_pressed()
+            if space_down[K_SPACE]:
+                for e in enemies:
+                    if e.visible:
+                        e.active = False
+
         key = pygame.key.get_pressed()
         # 方向操作
         if key[K_UP]:
@@ -149,7 +164,7 @@ def main():
                 screen.blit(me.destory_imgs[me.destory_index], me.rect)
                 me.destory_index += 1
                 if me.destory_index == len(me.destory_imgs):
-                    me.destory_index = 0
+                    me.destory_indeex = 0
                     me.active = True
 
         # 绘制敌机
@@ -190,9 +205,8 @@ def main():
                                 e.is_hit = True
                             else:
                                 e.active = False
-
         # 子弹重绘
-        if not (delay % 10):
+        if not (delay % 10) and len(bullets) > 0:
             bullets[bullet_index].reset(me.rect.midtop)
             bullet_index = (bullet_index + 1) % bullet_num
 
@@ -205,8 +219,16 @@ def main():
             supply.re_init()
 
         supply_get = pygame.sprite.collide_mask(me, supply)
+
         if supply_get:
             supply.active = False
+            if supply.supply_type == 0:
+                print('双倍子弹')
+            elif supply.supply_type == 1:
+                if bomb_num < 3:
+                    bomb_num += 1
+
+        draw_bomb(screen, bomb_num)
 
         score_sur = font.render(score_info + str(score), True, BLACK)
         screen.blit(score_sur, (10, 10))
@@ -214,6 +236,14 @@ def main():
         pygame.display.flip()
         # 设置一个帧数刷新率，没看懂这里的原理，官网文档设置了40，测试40有卡顿感觉
         clock.tick_busy_loop(60)
+
+
+def draw_bomb(screen, bomb_num):
+    if not bomb_num:
+        return
+    elif 1 <= bomb_num <= 3:
+        for i in range(bomb_num):
+            screen.blit(BOMB, (i * bomb_rect.width, bomb_draw_height))
 
 
 def draw_hp(screen, enemy):

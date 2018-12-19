@@ -20,6 +20,7 @@ class Enermy(pygame.sprite.Sprite):
         elif type == 3:
             self.init_big_enermy_info()
         pygame.mask.from_surface(self.image)
+        self.visible = False
 
 
 
@@ -74,6 +75,8 @@ class Enermy(pygame.sprite.Sprite):
         self.score = 50
 
     def move(self):
+        if self.rect.top > 0:
+            self.visible = True
         if self.rect.top < self.height:
             self.rect.top += self.speed
         else:
@@ -86,7 +89,7 @@ class Enermy(pygame.sprite.Sprite):
         self.destory_index = 0
         # 根据type类型增加hp
         self.hp = self.full_hp
-
+        self.visible = False
 
 if __name__ == '__main__':
     pass
