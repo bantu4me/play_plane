@@ -75,7 +75,7 @@ class Enermy(pygame.sprite.Sprite):
         self.score = 50
 
     def move(self):
-        if self.rect.top > 0:
+        if self.rect.bottom > 0:
             self.visible = True
         if self.rect.top < self.height:
             self.rect.top += self.speed

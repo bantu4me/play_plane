@@ -86,7 +86,7 @@ bomb_draw_height = bg_size[1] - bomb_rect.height
 
 def main():
     # 播放背景音乐
-    # pygame.mixer.music.play(-1)
+    pygame.mixer.music.play(-1)
     # 创建我的飞机
     me = MyPlane(bg_size)
     # 动画切换标记
@@ -97,9 +97,9 @@ def main():
     enemies = pygame.sprite.Group()
     add_enemies(enemies, 15)
     # 初始化中型敌机
-    # add_enemies(enemies, 10, type=2)
+    add_enemies(enemies, 10, type=2)
     # 初始化大型敌机
-    # add_enemies(enemies, 10, type=3)
+    add_enemies(enemies, 10, type=3)
     # 初始化子弹
     bullet_index = 0
     bullet_num = 4
@@ -123,11 +123,14 @@ def main():
                 sys.exit()
             # 检测按下了空格键,炸毁视野中的飞机
             space_down = pygame.key.get_pressed()
-            if space_down[K_SPACE] and bomb_num>0:
+            if space_down[K_SPACE]:
                 bomb_num -= 1
+                vis = 0
                 for e in enemies:
                     if e.visible:
+                        vis += 1
                         e.active = False
+                print('vis:',vis)
 
         key = pygame.key.get_pressed()
         # 方向操作
