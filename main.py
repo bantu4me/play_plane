@@ -123,7 +123,8 @@ def main():
                 sys.exit()
             # 检测按下了空格键,炸毁视野中的飞机
             space_down = pygame.key.get_pressed()
-            if space_down[K_SPACE]:
+            if space_down[K_SPACE] and bomb_num>0:
+                bomb_num -= 1
                 for e in enemies:
                     if e.visible:
                         e.active = False
