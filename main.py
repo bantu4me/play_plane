@@ -164,7 +164,7 @@ def main():
                 screen.blit(me.destory_imgs[me.destory_index], me.rect)
                 me.destory_index += 1
                 if me.destory_index == len(me.destory_imgs):
-                    me.destory_indeex = 0
+                    me.destory_index = 0
                     me.active = True
 
         # 绘制敌机
