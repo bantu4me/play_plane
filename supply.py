@@ -18,6 +18,7 @@ class Supply(pygame.sprite.Sprite):
 
     def re_init(self):
         supply_type = randint(0, 1)
+        supply_type = 0
         self.supply_type = supply_type
         if supply_type == 0:
             self.__init_double_bullet()
