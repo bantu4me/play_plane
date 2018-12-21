@@ -17,12 +17,10 @@ class Supply(pygame.sprite.Sprite):
         self.re_init()
 
     def re_init(self):
-        supply_type = randint(0, 1)
-        supply_type = 0
-        self.supply_type = supply_type
-        if supply_type == 0:
+        self.supply_type = randint(0, 1)
+        if self.supply_type == 0:
             self.__init_double_bullet()
-        elif supply_type == 1:
+        elif self.supply_type == 1:
             self.__init_bomb()
         self.rect = self.image.get_rect()
         self.rect.left = randint(0, self.width - self.rect.width)

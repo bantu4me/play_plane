@@ -6,6 +6,7 @@ from bullet import Bullet
 from myplane import MyPlane
 from enemy import Enermy
 from supply import Supply
+import time
 
 # 初始化
 pygame.init()
@@ -119,6 +120,10 @@ def main():
 
     # 双倍子弹
     double_bullets_flag = False
+    # 双倍子弹时间限制
+    double_bullets_start = 0
+    double_bullets_limit = 30
+
 
     while running:
         # 事件循环检测
@@ -263,45 +268,6 @@ def main():
                                 else:
                                     e.active = False
 
-            # 子弹
-            # for b_l, b_r in double_bullets:
-            #     if b_l.active:
-            #         print(1)
-            #         b_l.move()
-            #         screen.blit(b_l.image, b_l.rect)
-            #         enemies_hit = pygame.sprite.spritecollide(b_l, enemies, False, pygame.sprite.collide_mask)
-            #         if enemies_hit:
-            #             # 子弹击中目标重置位置
-            #             b_l.reset(me.rect.midtop)
-            #             for e in enemies_hit:
-            #                 # 击落敌机
-            #                 if e.type == 1:
-            #                     e.active = False
-            #                 elif e.type == 2 or e.type == 3:
-            #                     if e.hp > 0:
-            #                         e.hp -= 1
-            #                         e.is_hit = True
-            #                     else:
-            #                         e.active = False
-            #     if b_r.active:
-            #         print(2)
-            #         b_r.move()
-            #         screen.blit(b_r.image, b_r.rect)
-            #         enemies_hit = pygame.sprite.spritecollide(b_r, enemies, False, pygame.sprite.collide_mask)
-            #         if enemies_hit:
-            #             # 子弹击中目标重置位置
-            #             b_r.reset(me.rect.midtop)
-            #             for e in enemies_hit:
-            #                 # 击落敌机
-            #                 if e.type == 1:
-            #                     e.active = False
-            #                 elif e.type == 2 or e.type == 3:
-            #                     if e.hp > 0:
-            #                         e.hp -= 1
-            #                         e.is_hit = True
-            #                     else:
-            #                         e.active = False
-
         # 提供补给的粗略逻辑：
         # 每30秒钟以30%的概率出现一个补给
         if supply.active:
@@ -315,13 +281,26 @@ def main():
         if supply_get:
             supply.active = False
             if supply.supply_type == 0:
-                double_bullets_flag = not double_bullets_flag
+                double_bullets_flag = True
+                double_bullets_start = time.time()
+                print(double_bullets_start)
                 # 重置子弹的位置
-                for b in bullets:
-                    b.reset(me.rect.midtop)
+                for b_l,b_r in zip(bullets_left,bullets_right):
+                    b_l.reset(me.rect.midtop)
+                    b_r.reset(me.rect.midtop)
+
             elif supply.supply_type == 1:
                 if bomb_num < 3:
                     bomb_num += 1
+
+        if double_bullets_flag:
+            double_bullets_end = time.time()
+            # 超过30秒后取消双倍子弹
+            t = double_bullets_end - double_bullets_start
+            if t > double_bullets_limit:
+                double_bullets_flag = False
+                for b in bullets:
+                    b.reset(me.rect.midtop)
 
         draw_bomb(screen, bomb_num)
 
