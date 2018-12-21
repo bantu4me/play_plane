@@ -18,7 +18,7 @@ class Bullet(pygame.sprite.Sprite):
                 self.rect.left -= 10
             elif deviation == 2:
                 self.rect.left += 10
-        self.speed = 12
+        self.speed = 11
         # 子弹碰撞即为false
         self.active = True
         pygame.mask.from_surface(self.image)

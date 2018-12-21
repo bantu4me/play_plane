@@ -122,8 +122,7 @@ def main():
     double_bullets_flag = False
     # 双倍子弹时间限制
     double_bullets_start = 0
-    double_bullets_limit = 30
-
+    double_bullets_limit = 5
 
     while running:
         # 事件循环检测
@@ -285,7 +284,7 @@ def main():
                 double_bullets_start = time.time()
                 print(double_bullets_start)
                 # 重置子弹的位置
-                for b_l,b_r in zip(bullets_left,bullets_right):
+                for b_l, b_r in zip(bullets_left, bullets_right):
                     b_l.reset(me.rect.midtop)
                     b_r.reset(me.rect.midtop)
 
@@ -297,6 +296,7 @@ def main():
             double_bullets_end = time.time()
             # 超过30秒后取消双倍子弹
             t = double_bullets_end - double_bullets_start
+            # print('t:',t)
             if t > double_bullets_limit:
                 double_bullets_flag = False
                 for b in bullets:
